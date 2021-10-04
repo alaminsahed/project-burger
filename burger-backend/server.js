@@ -4,6 +4,8 @@ const app = express();
 const morgan = require('morgan');
 const cors   = require('cors');
 const connect = require('./config/db');
+const userRouters = require('./routers/userRouters.js');
+const orderRouters = require('./routers/orderRouters');
 
 dotenv.config({path:'./config/config.env'});
 
@@ -14,6 +16,11 @@ connect();
 app.use(express.json());
 
 app.use(morgan('dev'));
+
+app.use('/',userRouters);
+
+app.use('/',orderRouters);
+
 
 
 
