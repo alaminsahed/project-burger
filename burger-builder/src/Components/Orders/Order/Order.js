@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Order = props => {
+    console.log(props);
     const ingredientSummary = props.order.ingredients.map(item => {
         return (
             <span style={{

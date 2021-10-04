@@ -42,12 +42,14 @@ export const orderLoadFailed = () => {
 }
 
 export const fetchOrders = (token, userId) => dispatch => {
-    const queryParams = '&orderBy="userId"&equalTo="' + userId + '"';
-    axios.get('YOUR_FIREBASE_LINK' + token + queryParams)
-        .then(response => {
-            dispatch(loadOrders(response.data));
-        })
-        .catch(err => {
-            dispatch(orderLoadFailed());
-        })
+
+    let url = process.env.REACT_APP_BACKEND_URL;
+  
+    axios.get(`${url}/orderlist`, { headers: { "Authorization": `Bearer ${token}` } })
+    .then(response => {
+        dispatch(loadOrders(response.data));
+    })
+    .catch(err => {
+        dispatch(orderLoadFailed());
+    })
 }

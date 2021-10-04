@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../models/users");
 const bcrypt = require("bcrypt");
-const authorize = require("../middlewires/authoraize");
+
 
 //register new user
 const getNewUser = async (req, res) => {
@@ -24,9 +24,10 @@ const getNewUser = async (req, res) => {
 
   try {
     const saveUser = await newUser.save();
-    res.send({ token: token, data: saveUser });
+    res.send({ token: token, user: saveUser });
   } catch (error) {
-    res.status(400).send("Register failed");
+    console.log(error);
+    res.status(401).send("Register failed");
   }
 };
 
@@ -52,6 +53,6 @@ const getUser = async (req, res) => {
 
 router.route("/").post(getNewUser);
 
-router.route("/user").post(getUser);
+router.route("/login").post(getUser);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
+import jwt_decode from "jwt-decode";
 
 export const authSuccess = (token, userId) => {
     return {
@@ -27,31 +28,34 @@ export const authFailed = errMsg => {
 
 export const auth = (email, password, mode) => dispatch => {
     dispatch(authLoading(true));
+
     const authData = {
         email: email,
         password: password,
-        returnSecureToken: true,
+        
     }
-
+    //connect to backend
+    let url = process.env.REACT_APP_BACKEND_URL;
     let authUrl = null;
     if (mode === "Sign Up") {
-        authUrl = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=";
+        authUrl = `${url}/user`;
     } else {
-        authUrl = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
+        authUrl = `${url}/user/login`;
     }
-    const API_KEY = "YOUR_API_KEY";
-    axios.post(authUrl + API_KEY, authData)
+   
+    axios.post(authUrl,authData)
         .then(response => {
             dispatch(authLoading(false));
-            localStorage.setItem('token', response.data.idToken);
-            localStorage.setItem('userId', response.data.localId);
-            const expirationTime = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userId', response.data.user._id);
+            let decode = jwt_decode(response.data.token);
+            const expirationTime = new Date(decode.exp * 1000);
             localStorage.setItem('expirationTime', expirationTime);
-            dispatch(authSuccess(response.data.idToken, response.data.localId));
+            dispatch(authSuccess(response.data.token, response.data.user._id));
         })
         .catch(err => {
             dispatch(authLoading(false));
-            dispatch(authFailed(err.response.data.error.message));
+            dispatch(authFailed(err.response.data));
         })
 }
 

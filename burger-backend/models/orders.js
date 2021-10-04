@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const orderSchema= new mongoose.Schema({
     userId: mongoose.Schema.Types.ObjectId,
-    ingredients: [{type:{type:String, required:true}, amount:Number}],
+    ingredients: [{type:{type:String}, amount:Number}],
     customer:{
         deliveryAddress: String,
         phone: String,

@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.use(morgan('dev'));
 
-app.use('/',userRouters);
+app.use('/user',userRouters);
 
 app.use('/',orderRouters);
 

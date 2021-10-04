@@ -57,7 +57,11 @@ class Checkout extends Component {
             orderTime: new Date(),
             userId: this.props.userId,
         }
-        axios.post("YOUR_FIREBASE_ORDER_LINK" + this.props.token, order)
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/addOrder`, order,{
+            headers:{
+                "Authorization": `Bearer ${this.props.token}`
+            }
+        })
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
