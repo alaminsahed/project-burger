@@ -6,8 +6,11 @@ const cors   = require('cors');
 const connect = require('./config/db');
 const userRouters = require('./routers/userRouters.js');
 const orderRouters = require('./routers/orderRouters');
+const compression = require('compression');
 
 dotenv.config({path:'./config/config.env'});
+
+app.use(compression())
 
 app.use(cors());
 
